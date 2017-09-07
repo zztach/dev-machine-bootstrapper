@@ -1,0 +1,8 @@
+[Unit]
+Description=Starts Conky service
+
+[Service]
+ExecStart=/home/$USER/.concky/conky-startup.sh
+
+[Install]
+WantedBy=multi-user.target

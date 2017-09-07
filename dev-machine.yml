@@ -171,3 +171,24 @@
        name: parcellite
        state: latest
 
+   - name: Install conky
+     become: true
+     apt:
+       name: conky-all
+       state: latest
+
+   - name: Add conky-manager repository
+     become: true
+     apt_repository:
+       repo: 'ppa:teejee2008/ppa'
+
+   - name: Install conky manager
+     become: true
+     apt:
+       name: conky-manager
+       state: latest
+
+   - name: Apply conky configuration
+     copy:
+       src: /tmp/dev-machine-bootstrapper/apps-conf-files/conky
+       dest: /home/{{ ansible_env.USER }}/.conky
