@@ -192,3 +192,10 @@
      copy:
        src: /tmp/dev-machine-bootstrapper/apps-conf-files/conky
        dest: /home/{{ ansible_env.USER }}/.conky
+
+   - name: Install indicator-multiload
+     become: true
+     apt:
+       name: indicator-multiload
+       state: latest
+
