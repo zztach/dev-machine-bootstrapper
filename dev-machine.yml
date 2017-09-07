@@ -164,4 +164,10 @@
      apt:
        name: vlc
        state: latest
- 
+
+   - name: Install VLC
+     become: true
+     apt:
+       name: parcellite
+       state: latest
+
