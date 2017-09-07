@@ -1,0 +1,113 @@
+conky.config = {
+-- Conky Sample for Conky V1.10
+-- Modified by Dean Loros
+-- Conky settings #
+	background = false,
+	update_interval = 1,
+	double_buffer = true,
+	no_buffers = true,
+
+-- number of cpu samples to average
+-- set to 1 to disable averaging
+	cpu_avg_samples = 1,
+
+-- number of net samples to average
+-- set to 1 to disable averaging
+	net_avg_samples = 1,
+
+-- Window specifications #
+	own_window = true,
+        own_window_type = 'desktop',
+	own_window_hints = 'undecorated,below,sticky,skip_taskbar,skip_pager',
+	own_window_title = '',
+	own_window_transparent=true,
+	own_window_argb_visual = true,
+	own_window_argb_value = 180,
+
+-- Minimum size of text area
+	minimum_width = 240, minimum_height = 1080,
+
+-- minimum_size=130,
+
+
+-- Alignment #
+	alignment = 'top_right',
+	gap_x = 0,
+	gap_y = 60,
+
+	border_inner_margin = 0,
+	border_outer_margin = 0,
+
+-- Graphics settings #
+	draw_shades = false,
+	draw_outline = false,
+	draw_borders = false,
+	draw_graph_borders = false,
+
+-- Text settings #
+	use_xft = true,
+	font = 'pftempestafivecondensed:size=8',
+	xftalpha = 0.5,
+
+	override_utf8_locale = true,
+
+	imlib_cache_size = 0,
+
+-- Color scheme #
+	default_color = '#FFFFFF',
+	color1 = 'green',
+	color2 = 'yellow',
+
+};
+
+conky.text = [[
+${image ~/.conky/themes/elegant.png -p 0,0}
+${goto 20}${color2}${font pftempestafivecondensed:size=11}SYSTEM:${font}${color1}
+${goto 30}${exec cat /etc/issue.net}
+${goto 30}${exec cat /proc/cpuinfo|grep 'model name'|sed -e 's/model name.*: //'| uniq | cut -c 1-32}
+${goto 30}Kernel:  ${color}$kernel${color1}
+${goto 30}CPU Speed: ${color}${freq_g 1}${goto 130}${color1}GHz
+
+${goto 20}${color2}${font pftempestafivecondensed:size=11}CPU LOAD & TEMP:${font}
+${goto 90}LOAD:${goto 160}TEMP:${color1}${font}
+${goto 30}CPU 0${goto 90}${color}${cpu cpu0}%${goto 160}${execi 30 sensors|grep 'Core 0'| awk -F'+' '{print $2}' | awk -F'.' '{print $1}'} °C 
+${goto 30}${color1}CPU 1${goto 90}${color}${cpu cpu1}%${goto 160}${execi 30 sensors|grep 'Core 1'| awk -F'+' '{print $2}' | awk -F'.' '{print $1}'} °C 
+${goto 30}${color1}CPU 2${goto 90}${color}${cpu cpu2}%${goto 160}${execi 30 sensors|grep 'Core 2'| awk -F'+' '{print $2}' | awk -F'.' '{print $1}'} °C 
+${goto 30}${color1}CPU 3${goto 90}${color}${cpu cpu3}%${goto 160}${execi 30 sensors|grep 'Core 3'| awk -F'+' '{print $2}' | awk -F'.' '{print $1}'} °C 
+${goto 20}${color2}${font pftempestafivecondensed:size=11}${voffset 20}CPU PROCESSES:${font}${color1}
+${goto 30}${voffset 10}${color1}${top name 1}${goto 130}${color}${top cpu 1}%
+${goto 30}${color1}${top name 2}${goto 130}${color}${top cpu 2}%
+${goto 30}${color1}${top name 3}${goto 130}${color}${top cpu 3}%
+${goto 30}${color1}${top name 4}${goto 130}${color}${top cpu 4}%
+${goto 30}${color1}${top name 5}${goto 130}${color}${top cpu 5}%
+
+${goto 20}${color2}${font pftempestafivecondensed:size=11}MEM PROCESSES:${font}${color1}
+${goto 30}${voffset 10}${color1}${top_mem name 1}${goto 130}${color}${top mem 1}%
+${goto 30}${color1}${top_mem name 2}${goto 130}${color}${top mem 2}%
+${goto 30}${color1}${top_mem name 3}${goto 130}${color}${top mem 3}%
+${goto 30}${color1}${top_mem name 4}${goto 130}${color}${top mem 4}%
+${goto 30}${color1}${top_mem name 5}${goto 130}${color}${top mem 5}%
+
+${goto 20}${color2}${font pftempestafivecondensed:size=11}NVIDIA:${font}${color1}
+${goto 30}GPU1:  ${color}${execi 5 nvidia-settings -t -q [gpu:0]/GPUCoreTemp} °C${goto 140}${color1}GPU2:  ${color}${execi 5 nvidia-settings -t -q [gpu:1]/GPUCoreTemp} °C
+
+${goto 20}${color2}${font pftempestafivecondensed:size=11}DISCS:${font}
+${goto 90}FREE:${goto 160}TOTAL:${color}${font}
+${goto 30}${color1}Home${color}${goto 90}${fs_free /home}${goto 160}${fs_size /home}
+${goto 30}${color1}Root${color}${goto 90}${fs_free /}${goto 160}${fs_size /}
+
+${goto 20}${color2}${font pftempestafivecondensed:size=11}NETWORK:${font}${color}
+${goto 30}${color1}Down${color}${goto 60} ${downspeed wlp3s0} ${goto 120}/  ${totaldown wlp3s0}
+${offset 10}${downspeedgraph wlp3s0 15,200 324D23 77B753 100 -l}
+
+${goto 30}${color1}UP${color}${goto 60} ${upspeed wlp3s0} ${goto 120}/  ${totalup wlp3s0}
+${offset 10}${upspeedgraph wlp3s0 15,200 4B1B0C FF5C2B 100 -l}
+
+
+${goto 30}${color2}${font pftempestafivecondensed:size=11}ADDRESS:${font}${color1}
+${goto 30}Public IP:${color}${goto 90}${execi 60 wget http://ipinfo.io/ip -qO -}
+${goto 30}${color1}Lan IP:${color}${goto 90}${addr wlp3s0}
+${goto 30}${color1}Inbound Ports:${color}${goto 130}${tcp_portmon 1 32767 count}
+${goto 30}${color1}Outbound Ports:${color}${goto 130}${tcp_portmon 32768 61000 count}
+
+]];
