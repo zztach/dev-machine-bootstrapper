@@ -146,3 +146,22 @@
        destfile: "{{ ansible_env.USER }}/.bashrc"
        line: 'export JAVA_HOME=/opt/{{ jdk_folder }}'
      when: jdk_folders | length == 0
+  
+   - name: Install Steam
+     become: true
+     apt:
+       deb: https://steamcdn-a.akamaihd.net/client/installer/steam.deb
+       state: present
+
+   - name: Install WPS
+     become: true
+     apt:
+       deb: http://kdl1.cache.wps.com/ksodl/download/linux/a21//wps-office_10.1.0.5707~a21_amd64.deb
+       state: present
+
+   - name: Install VLC
+     become: true
+     apt:
+       name: vlc
+       state: latest
+ 
