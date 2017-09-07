@@ -23,12 +23,22 @@
      apt:
        name: tilix
        state: present
+   
+   - name: Pull ansible script and resources from git
+     git:
+       repo: https://github.com/zztach/dev-machine-bootstrapper.git
+       dest: "/tmp/dev-machine-bootstrapper"
+       update: yes
+       force: yes
 
    - name: Install the package "dconf-cli" for importing Tilix settings
      become: true
      apt:
        name: dconf-cli
        state: present
+
+   - name: Restore tilix configuration
+     shell: dconf load /com/gexperts/Tilix/ < /tmp/dev-machine-bootstrapper/apps-conf-files/tilix/tilix.conf
 
    - name: Check VirtualGL path under /opt
      stat: path="/{{ apps_dir }}/VirtualGL-2.5.2"
