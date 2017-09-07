@@ -1,0 +1,138 @@
+---
+
+- hosts: localhost
+  connection: local
+  vars:
+    apps_dir: "/home/{{ ansible_env.USER }}"
+    jdk_folder_name: jdk1.8.0_144
+    java_version: 8u144
+    download_url: "http://download.oracle.com/otn-pub/java/jdk/8u144-b01/090f390dda5b47b9b721c7dfaa008135/jdk-{{ java_version }}-linux-x64.tar.gz"
+    jdk_folder: "{{ apps_dir }}/{{ jdk_folder_name }}"
+    java_archive: "{{ apps_dir }}/jdk-{{ java_version }}-linux-x64.tar.gz"
+    idea_version: 2017.2.3
+    clion_version: 2017.2.2
+
+  tasks:
+   - name: Add Tilix repository
+     become: true
+     apt_repository:
+       repo: 'ppa:webupd8team/terminix'
+
+   - name: Install the package "Tilix"
+     become: true
+     apt:
+       name: tilix
+       state: present
+
+   - name: Install the package "dconf-cli" for importing Tilix settings
+     become: true
+     apt:
+       name: dconf-cli
+       state: present
+
+   - name: Check VirtualGL path under /opt
+     stat: path="/{{ apps_dir }}/VirtualGL-2.5.2"
+     register: virtualgl_path
+
+   - name: Download VirtualGL and extract under /opt
+     unarchive:
+       src: https://github.com/VirtualGL/virtualgl/releases/download/2.5.2test/VirtualGL-2.5.2.tar.gz
+       dest: "{{ apps_dir }}"
+       remote_src: True
+     when: not virtualgl_path.stat.exists
+
+   - name: Check glew path under /opt
+     stat: path="/{{ apps_dir }}/glew-1.11.0"
+     register: glew_path
+
+   - name: Download GLEW and extract under /opt
+     unarchive:
+       src: https://sourceforge.net/projects/glew/files/glew/1.11.0/glew-1.11.0.zip/download
+       dest: "{{ apps_dir }}"
+       remote_src: True
+     when: not glew_path.stat.exists
+
+   - name: Check VirtualGL path under /opt
+     stat: path="/{{ apps_dir }}/glm"
+     register: glm_path
+
+   - name: Download GLM and extract under /opt
+     unarchive:
+       src: https://sourceforge.net/projects/ogl-math/files/glm-0.9.4.6/glm-0.9.4.6.zip/download
+       dest: "{{ apps_dir }}"
+       remote_src: True
+     when: not glm_path.stat.exists
+
+   - name: Check for IDEA folder 
+     find:
+       paths: "/{{ apps_dir }}"
+       patterns: "idea*"
+     register: idea_folders
+
+   - name: Download IntelliJ Idea and extract under /opt
+     unarchive:
+       src: "https://download.jetbrains.com/idea/ideaIU-{{ idea_version }}.tar.gz"
+       dest: "{{ apps_dir }}"
+       remote_src: True
+     when: idea_folders | length == 0
+
+   - name: Check for CLion folder
+     find:
+       paths: "/{{ apps_dir }}"
+       patterns: "clion*"
+     register: clion_folders
+
+   - name: Download CLion and extract under /opt
+     unarchive:
+       src: "https://download.jetbrains.com/cpp/CLion-{{ clion_version }}.tar.gz"
+       dest: "{{ apps_dir }}"
+       remote_src: True
+     when: clion_folders | length == 0
+
+   - name: Check for Sublime folder
+     find:
+       paths: "/{{ apps_dir }}"
+       patterns: "sublime*"
+     register: sublime_folders
+
+   - name: Download SublimeText and extract under /opt
+     unarchive:
+       src: https://download.sublimetext.com/sublime_text_3_build_3126_x64.tar.bz2
+       dest: "{{ apps_dir }}"
+       remote_src: True
+     when: sublime_folders | length == 0
+
+   - name: Check for Java folder
+     find:
+       paths: "/{{ apps_dir }}"
+       patterns: "jdk*"
+     register: jdk_folders
+
+
+   - name: Download Java
+     become: true    
+     command: "curl -L -b \"oraclelicense=a\" {{ download_url }} -O -o {{ apps_dir }}"
+     when: jdk_folders | length == 0
+
+   - name: Unpack archive
+     become: true
+     unarchive:
+       src: "{{ java_archive }}"
+       dest: "{{ apps_dir }}"
+     when: jdk_folders | length == 0
+
+   - name: Fix ownership
+     become: true
+     file: state=directory path={{ jdk_folder }} owner={{ ansible_env.USER }} group={{ ansible_env.USER }} recurse=yes
+
+   - name: Clean up
+     become: true
+     file: state=absent path={{ java_archive }}
+
+   - name: Update .bashrc with JAVA_HOME
+     lineinfile:
+       state: present
+       regexp: 'JAVA_HOME'
+       destfile: "{{ ansible_env.USER }}/.bashrc"
+       line: 'export JAVA_HOME=/opt/{{ jdk_folder }}'
+     when: jdk_folders | length == 0
