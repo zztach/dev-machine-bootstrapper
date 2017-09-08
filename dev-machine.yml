@@ -3,7 +3,7 @@
 - hosts: localhost
   connection: local
   vars:
-    apps_dir: "/home/{{ ansible_env.USER }}"
+    apps_dir: "/opt"
     jdk_folder_name: jdk1.8.0_144
     java_version: 8u144
     download_url: "http://download.oracle.com/otn-pub/java/jdk/8u144-b01/090f390dda5b47b9b721c7dfaa008135/jdk-{{ java_version }}-linux-x64.tar.gz"
@@ -45,6 +45,7 @@
      register: virtualgl_path
 
    - name: Download VirtualGL and extract under /opt
+     become: true
      unarchive:
        src: https://github.com/VirtualGL/virtualgl/releases/download/2.5.2test/VirtualGL-2.5.2.tar.gz
        dest: "{{ apps_dir }}"
@@ -56,17 +57,19 @@
      register: glew_path
 
    - name: Download GLEW and extract under /opt
+     become: true
      unarchive:
        src: https://sourceforge.net/projects/glew/files/glew/1.11.0/glew-1.11.0.zip/download
        dest: "{{ apps_dir }}"
        remote_src: True
      when: not glew_path.stat.exists
 
-   - name: Check VirtualGL path under /opt
+   - name: Check glm path under /opt
      stat: path="/{{ apps_dir }}/glm"
      register: glm_path
 
    - name: Download GLM and extract under /opt
+     become: true
      unarchive:
        src: https://sourceforge.net/projects/ogl-math/files/glm-0.9.4.6/glm-0.9.4.6.zip/download
        dest: "{{ apps_dir }}"
@@ -80,6 +83,7 @@
      register: idea_folders
 
    - name: Download IntelliJ Idea and extract under /opt
+     become: true
      unarchive:
        src: "https://download.jetbrains.com/idea/ideaIU-{{ idea_version }}.tar.gz"
        dest: "{{ apps_dir }}"
@@ -93,6 +97,7 @@
      register: clion_folders
 
    - name: Download CLion and extract under /opt
+     become: true
      unarchive:
        src: "https://download.jetbrains.com/cpp/CLion-{{ clion_version }}.tar.gz"
        dest: "{{ apps_dir }}"
@@ -106,6 +111,7 @@
      register: sublime_folders
 
    - name: Download SublimeText and extract under /opt
+     become: true
      unarchive:
        src: https://download.sublimetext.com/sublime_text_3_build_3126_x64.tar.bz2
        dest: "{{ apps_dir }}"
@@ -154,19 +160,23 @@
        line: 'alias vi=vim.tiny'
 
    - name: Check if Steam already installed
-     shell: dpkg-query -W 'steam'
+     shell: apt list --installed | grep steam
      ignore_errors: True
      register: is_steam_installed
   
+   - name: asdsad
+     debug:
+       var: is_steam_installed.stdout
+
    - name: Install Steam
      become: true
      apt:
        deb: https://steamcdn-a.akamaihd.net/client/installer/steam.deb
        state: present
-     when: is_steam_installed == ""
+     when: is_steam_installed.stdout | length == 0
 
    - name: Check if WPS already installed
-     shell: dpkg-query -W 'wps-office'
+     shell: dpkg --get-selections | grep wps-office
      ignore_errors: True
      register: is_wps_installed
 
@@ -175,7 +185,7 @@
      apt:
        deb: http://kdl1.cache.wps.com/ksodl/download/linux/a21//wps-office_10.1.0.5707~a21_amd64.deb
        state: present
-     when: is_wps_installed == ""
+     when: is_wps_installed.stdout | length == 0
 
    - name: Install VLC
      become: true
@@ -199,7 +209,7 @@
      become: true
      copy:
        src: /tmp/dev-machine-bootstrapper/apps-conf-files/cairo/CairoDock.desktop
-       dest: /home/{{ ansible_env.USER }}/.config/autostart     
+       dest: /home/{{ ansible_env.USER }}/.config/autostart/CairoDock.desktop    
 
    - name: Install conky
      become: true
@@ -223,7 +233,7 @@
      become: true
      copy:
        src: /tmp/dev-machine-bootstrapper/apps-conf-files/conky/Conky.desktop
-       dest: /home/{{ ansible_env.USER }}/.config/autostart     
+       dest: /home/{{ ansible_env.USER }}/.config/autostart/Conky.desktop     
 
    - name: Install indicator-multiload
      become: true
