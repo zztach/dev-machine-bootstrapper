@@ -183,6 +183,18 @@
        name: parcellite
        state: latest
 
+   - name: Install cairo-dock
+     become: true
+     apt:
+       name: cairo-dock
+       state: latest
+
+   - name: Add Conky to startup 
+     become: true
+     copy:
+       src: /tmp/dev-machine-bootstrapper/apps-conf-files/cairo/CairoDock.desktop
+       dest: /home/{{ ansible_env.USER }}/.config/autostart     
+
    - name: Install conky
      become: true
      apt:
@@ -206,10 +218,6 @@
      copy:
        src: /tmp/dev-machine-bootstrapper/apps-conf-files/conky/Conky.desktop
        dest: /home/{{ ansible_env.USER }}/.config/autostart     
-
-   - name: reload systemd
-     become: yes
-     command: systemctl daemon-reload
 
    - name: Install indicator-multiload
      become: true
