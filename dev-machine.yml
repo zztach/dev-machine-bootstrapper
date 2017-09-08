@@ -143,9 +143,15 @@
      lineinfile:
        state: present
        regexp: 'JAVA_HOME'
-       destfile: "{{ ansible_env.USER }}/.bashrc"
+       destfile: "/home/{{ ansible_env.USER }}/.bashrc"
        line: 'export JAVA_HOME=/opt/{{ jdk_folder }}'
      when: jdk_folders | length == 0
+
+   - name: Alias of vi to vim.tiny
+     lineinfile:
+       state: present
+       destfile: "/home/{{ ansible_env.USER }}/.bashrc"
+       line: 'alias vi=vim.tiny'
 
    - name: Check if Steam already installed
      shell: dpkg-query -W 'steam'
