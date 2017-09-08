@@ -182,9 +182,18 @@
        src: /tmp/dev-machine-bootstrapper/apps-conf-files/conky/
        dest: /home/{{ ansible_env.USER }}/.conky     
 
-   - name: Apply conky configuration
+   - name: Apply +x permissions to conky startup script     
+     file:
+       path: /home/{{ ansible_env.USER }}/.conky/conky-startup.sh
+       owner: "{{ ansible_env.USER }}"
+       group: "{{ ansible_env.USER }}"
+       mode: "u=rw,g=r,o=r"
+
+   - name: Add Conky to startup 
      become: true
-     copy: src=/tmp/dev-machine-bootstrapper/apps-conf-files/conky/conky.service dest=/etc/systemd/system/ owner=root mode=644
+     copy:
+       src: /tmp/dev-machine-bootstrapper/apps-conf-files/conky/Conky.desktop
+       dest: /home/{{ ansible_env.USER }}/.config/autostart     
 
    - name: reload systemd
      become: yes
