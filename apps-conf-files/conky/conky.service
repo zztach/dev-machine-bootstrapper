@@ -2,7 +2,7 @@
 Description=Starts Conky service
 
 [Service]
-ExecStart=/home/$USER/.concky/conky-startup.sh
+ExecStart=/home/$USER/.conky/conky-startup.sh
 
 [Install]
 WantedBy=multi-user.target

@@ -88,9 +88,6 @@ ${goto 30}${color1}${top_mem name 3}${goto 130}${color}${top mem 3}%
 ${goto 30}${color1}${top_mem name 4}${goto 130}${color}${top mem 4}%
 ${goto 30}${color1}${top_mem name 5}${goto 130}${color}${top mem 5}%
 
-${goto 20}${color2}${font pftempestafivecondensed:size=11}NVIDIA:${font}${color1}
-${goto 30}GPU1:  ${color}${execi 5 nvidia-settings -t -q [gpu:0]/GPUCoreTemp} °C${goto 140}${color1}GPU2:  ${color}${execi 5 nvidia-settings -t -q [gpu:1]/GPUCoreTemp} °C
-
 ${goto 20}${color2}${font pftempestafivecondensed:size=11}DISCS:${font}
 ${goto 90}FREE:${goto 160}TOTAL:${color}${font}
 ${goto 30}${color1}Home${color}${goto 90}${fs_free /home}${goto 160}${fs_size /home}

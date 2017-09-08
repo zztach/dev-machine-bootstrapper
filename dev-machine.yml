@@ -165,7 +165,7 @@
        name: vlc
        state: latest
 
-   - name: Install VLC
+   - name: Install Parcellite
      become: true
      apt:
        name: parcellite
@@ -177,25 +177,23 @@
        name: conky-all
        state: latest
 
-   - name: Add conky-manager repository
-     become: true
-     apt_repository:
-       repo: 'ppa:teejee2008/ppa'
-
-   - name: Install conky manager
-     become: true
-     apt:
-       name: conky-manager
-       state: latest
+   - name: Apply conky configuration     
+     copy:
+       src: /tmp/dev-machine-bootstrapper/apps-conf-files/conky/
+       dest: /home/{{ ansible_env.USER }}/.conky     
 
    - name: Apply conky configuration
-     copy:
-       src: /tmp/dev-machine-bootstrapper/apps-conf-files/conky
-       dest: /home/{{ ansible_env.USER }}/.conky
+     become: true
+     copy: src=/tmp/dev-machine-bootstrapper/apps-conf-files/conky/conky.service dest=/etc/systemd/system/ owner=root mode=644
+
+   - name: reload systemd
+     become: yes
+     command: systemctl daemon-reload
 
    - name: Install indicator-multiload
      become: true
      apt:
        name: indicator-multiload
        state: latest
+   
 
