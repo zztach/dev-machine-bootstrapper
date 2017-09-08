@@ -146,18 +146,30 @@
        destfile: "{{ ansible_env.USER }}/.bashrc"
        line: 'export JAVA_HOME=/opt/{{ jdk_folder }}'
      when: jdk_folders | length == 0
+
+   - name: Check if Steam already installed
+     shell: dpkg-query -W 'steam'
+     ignore_errors: True
+     register: is_steam_installed
   
    - name: Install Steam
      become: true
      apt:
        deb: https://steamcdn-a.akamaihd.net/client/installer/steam.deb
        state: present
+     when: is_steam_installed == ""
+
+   - name: Check if WPS already installed
+     shell: dpkg-query -W 'wps-office'
+     ignore_errors: True
+     register: is_wps_installed
 
    - name: Install WPS
      become: true
      apt:
        deb: http://kdl1.cache.wps.com/ksodl/download/linux/a21//wps-office_10.1.0.5707~a21_amd64.deb
        state: present
+     when: is_wps_installed == ""
 
    - name: Install VLC
      become: true
@@ -187,7 +199,7 @@
        path: /home/{{ ansible_env.USER }}/.conky/conky-startup.sh
        owner: "{{ ansible_env.USER }}"
        group: "{{ ansible_env.USER }}"
-       mode: "u=rw,g=r,o=r"
+       mode: "u=rwx,g=r,o=r"
 
    - name: Add Conky to startup 
      become: true
