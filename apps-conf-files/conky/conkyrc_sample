@@ -94,16 +94,16 @@ ${goto 30}${color1}Home${color}${goto 90}${fs_free /home}${goto 160}${fs_size /h
 ${goto 30}${color1}Root${color}${goto 90}${fs_free /}${goto 160}${fs_size /}
 
 ${goto 20}${color2}${font pftempestafivecondensed:size=11}NETWORK:${font}${color}
-${goto 30}${color1}Down${color}${goto 60} ${downspeed wlp3s0} ${goto 120}/  ${totaldown wlp3s0}
-${offset 10}${downspeedgraph wlp3s0 15,200 324D23 77B753 100 -l}
+${goto 30}${color1}Down${color}${goto 60} ${downspeed $exec{ ifconfig | grep -B1 192 | awk {'print $1'} | head -n 1}} ${goto 120}/  ${totaldown $exec{ ifconfig | grep -B1 192 | awk {'print $1'} | head -n 1}}
+${offset 10}${downspeedgraph $exec{ ifconfig | grep -B1 192 | awk {'print $1'} | head -n 1} 15,200 324D23 77B753 100 -l}
 
-${goto 30}${color1}UP${color}${goto 60} ${upspeed wlp3s0} ${goto 120}/  ${totalup wlp3s0}
-${offset 10}${upspeedgraph wlp3s0 15,200 4B1B0C FF5C2B 100 -l}
+${goto 30}${color1}UP${color}${goto 60} ${upspeed $exec{ ifconfig | grep -B1 192 | awk {'print $1'} | head -n 1}} ${goto 120}/  ${totalup $exec{ ifconfig | grep -B1 192 | awk {'print $1'} | head -n 1}}
+${offset 10}${upspeedgraph $exec{ ifconfig | grep -B1 192 | awk {'print $1'} | head -n 1} 15,200 4B1B0C FF5C2B 100 -l}
 
 
 ${goto 30}${color2}${font pftempestafivecondensed:size=11}ADDRESS:${font}${color1}
 ${goto 30}Public IP:${color}${goto 90}${execi 60 wget http://ipinfo.io/ip -qO -}
-${goto 30}${color1}Lan IP:${color}${goto 90}${addr wlp3s0}
+${goto 30}${color1}Lan IP:${color}${goto 90}${addr $exec{ ifconfig | grep -B1 192 | awk {'print $1'} | head -n 1}}
 ${goto 30}${color1}Inbound Ports:${color}${goto 130}${tcp_portmon 1 32767 count}
 ${goto 30}${color1}Outbound Ports:${color}${goto 130}${tcp_portmon 32768 61000 count}
 
