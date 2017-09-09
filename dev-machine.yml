@@ -255,6 +255,11 @@
        name: cairo-dock
        state: latest
 
+   - name: Apply cairo-dock configuration     
+     copy:
+       src: /tmp/dev-machine-bootstrapper/apps-conf-files/cairo/
+       dest: /home/{{ ansible_env.USER }}/.config/cairo-dock     
+
    - name: Check if amdgpu driver already installed
      shell: dpkg --get-selections | grep amdgpu-pro
      ignore_errors: True
