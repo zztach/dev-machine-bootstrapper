@@ -52,12 +52,6 @@
        remote_src: True
      when: not virtualgl_path.stat.exists
 
-   - name: Change ownership to current user     
-     file:
-       path: "{{ apps_dir }}"
-       owner: "{{ ansible_env.USER }}"
-       group: "{{ ansible_env.USER }}"
-
    - name: Check glew path under /opt
      stat: path="/{{ apps_dir }}/glew-1.11.0"
      register: glew_path
@@ -213,12 +207,6 @@
        name: parcellite
        state: latest
 
-   - name: Add Conky to startup 
-     become: true
-     copy:
-       src: /tmp/dev-machine-bootstrapper/apps-conf-files/cairo/CairoDock.desktop
-       dest: /home/{{ ansible_env.USER }}/.config/autostart/CairoDock.desktop    
-
    - name: Install conky
      become: true
      apt:
@@ -260,21 +248,67 @@
        src: /tmp/dev-machine-bootstrapper/apps-conf-files/cairo/
        dest: /home/{{ ansible_env.USER }}/.config/cairo-dock     
 
+   - name: Add Cairo to startup 
+     become: true
+     copy:
+       src: /tmp/dev-machine-bootstrapper/apps-conf-files/cairo/CairoDock.desktop
+       dest: /home/{{ ansible_env.USER }}/.config/autostart/CairoDock.desktop    
+
+   - name: Check for Sublime folder
+     find:
+       paths: "{{ apps_dir }}/amdgpu-pro-17.30-465504"       
+     register: amdgpu_folders
+
    - name: Check if amdgpu driver already installed
      shell: dpkg --get-selections | grep amdgpu-pro
      ignore_errors: True
      register: is_amdgpu_installed
 
    - name: Download amdgpu pro driver
+     command: "wget https://www2.ati.com/drivers/linux/ubuntu/amdgpu-pro-17.30-465504.tar.xz -O /home/{{ ansible_env.USER }}/Downloads/amdgpu-pro-17.30-465504.tar.xz --referer=http://www2.ati.com"                    
+     when: amdgpu_folders.matched == 0
+
+   - name: Extract amdgpu pro driver
      become: true
      unarchive:
-       src: https://www2.ati.com/drivers/linux/ubuntu/amdgpu-pro-17.30-465504.tar.xz
+       src: /home/{{ ansible_env.USER }}/Downloads/amdgpu-pro-17.30-465504.tar.xz
        dest: "{{ apps_dir }}"
        remote_src: True
-     when: is_amdgpu_installed.stdout | length == 0
+     when: amdgpu_folders.matched == 0
 
-   - name: Change ownership to current user     
-     file:
-       path: "{{ apps_dir }}"
-       owner: "{{ ansible_env.USER }}"
-       group: "{{ ansible_env.USER }}"
+   - name: Install amd-gpu driver 
+     become: true
+     command: "{{ apps_dir }}/amdgpu-pro-17.30-465504/amdgpu-pro-install -y"                    
+     when: is_amdgpu_installed.stdout | length == 0   
+
+   - name: Fix ownership
+     become: true
+     file: state=directory path={{ apps_dir }}/clion-{{ clion_version }} owner={{ ansible_env.USER }} group={{ ansible_env.USER }} recurse=yes
+
+   - name: Fix ownership
+     become: true
+     file: state=directory path={{ apps_dir }}/idea-IU-172.3968.16 owner={{ ansible_env.USER }} group={{ ansible_env.USER }} recurse=yes
+  
+   - name: Fix ownership
+     become: true
+     file: state=directory path={{ apps_dir }}/amdgpu-pro-17.30-465504 owner={{ ansible_env.USER }} group={{ ansible_env.USER }} recurse=yes
+
+   - name: Fix ownership
+     become: true
+     file: state=directory path={{ apps_dir }}/sublime_text_3 owner={{ ansible_env.USER }} group={{ ansible_env.USER }} recurse=yes
+
+   - name: Fix ownership
+     become: true
+     file: state=directory path={{ apps_dir }}/VirtualGL-2.5.2 owner={{ ansible_env.USER }} group={{ ansible_env.USER }} recurse=yes
+
+   - name: Fix ownership
+     become: true
+     file: state=directory path={{ apps_dir }}/kingsoft owner={{ ansible_env.USER }} group={{ ansible_env.USER }} recurse=yes
+
+   - name: Fix ownership
+     become: true
+     file: state=directory path={{ apps_dir }}/glm owner={{ ansible_env.USER }} group={{ ansible_env.USER }} recurse=yes
+
+   - name: Fix ownership
+     become: true
+     file: state=directory path={{ apps_dir }}/glew-1.11.0 owner={{ ansible_env.USER }} group={{ ansible_env.USER }} recurse=yes
