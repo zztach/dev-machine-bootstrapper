@@ -88,7 +88,7 @@
        src: "https://download.jetbrains.com/idea/ideaIU-{{ idea_version }}.tar.gz"
        dest: "{{ apps_dir }}"
        remote_src: True
-     when: idea_folders | length == 0
+     when: idea_folders.matched == 0
 
    - name: Check for CLion folder
      find:
@@ -102,13 +102,17 @@
        src: "https://download.jetbrains.com/cpp/CLion-{{ clion_version }}.tar.gz"
        dest: "{{ apps_dir }}"
        remote_src: True
-     when: clion_folders | length == 0
+     when: clion_folders.matched == 0
 
    - name: Check for Sublime folder
      find:
-       paths: "/{{ apps_dir }}"
+       paths: "{{ apps_dir }}"
        patterns: "sublime*"
      register: sublime_folders
+
+   - name: testsub
+     debug:
+       var: sublime_folders
 
    - name: Download SublimeText and extract under /opt
      become: true
@@ -116,7 +120,7 @@
        src: https://download.sublimetext.com/sublime_text_3_build_3126_x64.tar.bz2
        dest: "{{ apps_dir }}"
        remote_src: True
-     when: sublime_folders | length == 0
+     when: sublime_folders.matched == 0
 
    - name: Check for Java folder
      find:
@@ -128,14 +132,14 @@
    - name: Download Java
      become: true    
      command: "curl -L -b \"oraclelicense=a\" {{ download_url }} -O -o {{ apps_dir }}"
-     when: jdk_folders | length == 0
+     when: jdk_folders.matched == 0
 
    - name: Unpack archive
      become: true
      unarchive:
        src: "{{ java_archive }}"
        dest: "{{ apps_dir }}"
-     when: jdk_folders | length == 0
+     when: jdk_folders.matched == 0
 
    - name: Fix ownership
      become: true
@@ -199,12 +203,6 @@
        name: parcellite
        state: latest
 
-   - name: Install cairo-dock
-     become: true
-     apt:
-       name: cairo-dock
-       state: latest
-
    - name: Add Conky to startup 
      become: true
      copy:
@@ -241,4 +239,8 @@
        name: indicator-multiload
        state: latest
    
-
+   - name: Install cairo-dock
+     become: true
+     apt:
+       name: cairo-dock
+       state: latest
