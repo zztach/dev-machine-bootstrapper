@@ -52,6 +52,12 @@
        remote_src: True
      when: not virtualgl_path.stat.exists
 
+   - name: Change ownership to current user     
+     file:
+       path: "{{ apps_dir }}"
+       owner: "{{ ansible_env.USER }}"
+       group: "{{ ansible_env.USER }}"
+
    - name: Check glew path under /opt
      stat: path="/{{ apps_dir }}/glew-1.11.0"
      register: glew_path
@@ -253,3 +259,22 @@
      copy:
        src: /tmp/dev-machine-bootstrapper/apps-conf-files/cairo/
        dest: /home/{{ ansible_env.USER }}/.config/cairo-dock     
+
+   - name: Check if amdgpu driver already installed
+     shell: dpkg --get-selections | grep amdgpu-pro
+     ignore_errors: True
+     register: is_amdgpu_installed
+
+   - name: Download amdgpu pro driver
+     become: true
+     unarchive:
+       src: https://www2.ati.com/drivers/linux/ubuntu/amdgpu-pro-17.30-465504.tar.xz
+       dest: "{{ apps_dir }}"
+       remote_src: True
+     when: is_amdgpu_installed.stdout | length == 0
+
+   - name: Change ownership to current user     
+     file:
+       path: "{{ apps_dir }}"
+       owner: "{{ ansible_env.USER }}"
+       group: "{{ ansible_env.USER }}"
