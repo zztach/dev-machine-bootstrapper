@@ -8,7 +8,7 @@
     java_version: 8u144
     download_url: "http://download.oracle.com/otn-pub/java/jdk/8u144-b01/090f390dda5b47b9b721c7dfaa008135/jdk-{{ java_version }}-linux-x64.tar.gz"
     jdk_folder: "{{ apps_dir }}/{{ jdk_folder_name }}"
-    java_archive: "{{ apps_dir }}/jdk-{{ java_version }}-linux-x64.tar.gz"
+    java_archive: "jdk-{{ java_version }}-linux-x64.tar.gz"
     idea_version: 2017.2.3
     clion_version: 2017.2.2
 
@@ -77,10 +77,14 @@
      when: not glm_path.stat.exists
 
    - name: Check for IDEA folder 
+     become: true
      find:
-       paths: "/{{ apps_dir }}"
-       patterns: "idea*"
+       paths: "/{{ apps_dir }}/idea-IU-172.3968.16"       
      register: idea_folders
+
+   - name: ideamsg
+     debug:
+       var: idea_folders
 
    - name: Download IntelliJ Idea and extract under /opt
      become: true
@@ -92,8 +96,7 @@
 
    - name: Check for CLion folder
      find:
-       paths: "/{{ apps_dir }}"
-       patterns: "clion*"
+       paths: "/{{ apps_dir }}/clion-2017.2.2/"       
      register: clion_folders
 
    - name: Download CLion and extract under /opt
@@ -106,8 +109,7 @@
 
    - name: Check for Sublime folder
      find:
-       paths: "{{ apps_dir }}"
-       patterns: "sublime*"
+       paths: "{{ apps_dir }}/sublime_text_3"       
      register: sublime_folders
 
    - name: testsub
@@ -124,10 +126,12 @@
 
    - name: Check for Java folder
      find:
-       paths: "/{{ apps_dir }}"
-       patterns: "jdk*"
+       paths: "{{ apps_dir }}/jdk1.8.0_144"       
      register: jdk_folders
 
+   - name: testjdk
+     debug:
+       var: jdk_folders
 
    - name: Download Java
      become: true    
