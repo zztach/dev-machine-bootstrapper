@@ -6,10 +6,6 @@
      paths: "{{ apps_dir }}/sublime_text_3"
    register: sublime_folders
 
- - name: testsub
-   debug:
-     var: sublime_folders
-
  - name: Download SublimeText and extract under /opt
    become: true
    unarchive:

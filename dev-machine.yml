@@ -3,11 +3,11 @@
 - hosts: localhost
   connection: local
 
-- name: Common tasks
+- name: Prerequisites
   include: common.yml
 
 - name: Install development tools
   include: dev-tools.yml
 
-- name: Install development tools
+- name: Install various software
   include: software.yml

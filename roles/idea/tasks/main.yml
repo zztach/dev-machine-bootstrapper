@@ -7,10 +7,6 @@
     paths: "/{{ apps_dir }}/idea-IU-172.3968.16"
   register: idea_folders
 
-- name: ideamsg
-  debug:
-    var: idea_folders
-
 - name: Download IntelliJ Idea and extract under /opt
   become: true
   unarchive:

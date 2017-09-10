@@ -6,10 +6,6 @@
      paths: "{{ apps_dir }}/jdk1.8.0_144"
    register: jdk_folders
 
- - name: testjdk
-   debug:
-     var: jdk_folders
-
  - name: Download Java
    become: true
    command: "curl -L -b \"oraclelicense=a\" {{ download_url }} -O -o {{ apps_dir }}"
