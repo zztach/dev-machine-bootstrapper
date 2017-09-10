@@ -18,3 +18,8 @@
    become: true
    file: state=directory path={{ apps_dir }}/sublime_text_3 owner={{ ansible_env.USER }} group={{ ansible_env.USER }} recurse=yes
 
+ - name: Copy all desktop entries to the appropriate directory
+   become: true
+   copy:
+     src: /tmp/dev-machine-bootstrapper/desktop-entries/sublime_text.desktop
+     dest: /usr/share/applications/sublime_text.desktop

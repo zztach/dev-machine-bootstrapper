@@ -21,9 +21,3 @@
         path: /home/{{ ansible_env.USER }}/.config/autostart
         state: directory
         mode: 0755
-
-    - name: Copy all desktop entries to the appropriate directory
-      become: true
-      copy:
-        src: /tmp/dev-machine-bootstrapper/desktop-entries
-        dest: /usr/share/applications
