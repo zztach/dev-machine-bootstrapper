@@ -1,0 +1,18 @@
+---
+# tasks file for glm
+
+- name: Check glm path under /opt
+  stat: path="/{{ apps_dir }}/glm"
+  register: glm_path
+
+- name: Download GLM and extract under /opt
+  become: true
+  unarchive:
+    src: https://sourceforge.net/projects/ogl-math/files/glm-0.9.4.6/glm-0.9.4.6.zip/download
+    dest: "{{ apps_dir }}"
+    remote_src: True
+  when: not glm_path.stat.exists
+
+- name: Fix ownership
+  become: true
+  file: state=directory path={{ apps_dir }}/glm owner={{ ansible_env.USER }} group={{ ansible_env.USER }} recurse=yes

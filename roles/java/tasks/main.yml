@@ -1,0 +1,39 @@
+---
+# tasks file for java
+
+ - name: Check for Java folder
+   find:
+     paths: "{{ apps_dir }}/jdk1.8.0_144"
+   register: jdk_folders
+
+ - name: testjdk
+   debug:
+     var: jdk_folders
+
+ - name: Download Java
+   become: true
+   command: "curl -L -b \"oraclelicense=a\" {{ download_url }} -O -o {{ apps_dir }}"
+   when: jdk_folders.matched == 0
+
+ - name: Unpack archive
+   become: true
+   unarchive:
+     src: "{{ java_archive }}"
+     dest: "{{ apps_dir }}"
+   when: jdk_folders.matched == 0
+
+ - name: Fix ownership
+   become: true
+   file: state=directory path={{ jdk_folder }} owner={{ ansible_env.USER }} group={{ ansible_env.USER }} recurse=yes
+
+ - name: Clean up
+   become: true
+   file: state=absent path={{ java_archive }}
+
+ - name: Update .bashrc with JAVA_HOME
+   lineinfile:
+     state: present
+     regexp: 'JAVA_HOME'
+     destfile: "/home/{{ ansible_env.USER }}/.bashrc"
+     line: 'export JAVA_HOME=/opt/{{ jdk_folder }}'
+   when: jdk_folders | length == 0

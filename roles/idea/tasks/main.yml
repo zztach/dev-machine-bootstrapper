@@ -1,0 +1,24 @@
+---
+# tasks file for idea
+
+- name: Check for IDEA folder
+  become: true
+  find:
+    paths: "/{{ apps_dir }}/idea-IU-172.3968.16"
+  register: idea_folders
+
+- name: ideamsg
+  debug:
+    var: idea_folders
+
+- name: Download IntelliJ Idea and extract under /opt
+  become: true
+  unarchive:
+    src: "https://download.jetbrains.com/idea/ideaIU-{{ idea_version }}.tar.gz"
+    dest: "{{ apps_dir }}"
+    remote_src: True
+  when: idea_folders.matched == 0
+
+- name: Fix ownership
+  become: true
+  file: state=directory path={{ apps_dir }}/idea-IU-172.3968.16 owner={{ ansible_env.USER }} group={{ ansible_env.USER }} recurse=yes

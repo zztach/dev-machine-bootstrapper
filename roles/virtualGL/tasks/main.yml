@@ -1,0 +1,18 @@
+---
+# tasks file for virtualGL
+- name: Check VirtualGL path under /opt
+  stat: path="/{{ apps_dir }}/VirtualGL-2.5.2"
+  register: virtualgl_path
+
+- name: Download VirtualGL and extract under /opt
+  become: true
+  unarchive:
+    src: https://github.com/VirtualGL/virtualgl/releases/download/2.5.2test/VirtualGL-2.5.2.tar.gz
+    dest: "{{ apps_dir }}"
+    remote_src: True
+  when: not virtualgl_path.stat.exists
+
+- name: Fix ownership
+  become: true
+  file: state=directory path={{ apps_dir }}/VirtualGL-2.5.2 owner={{ ansible_env.USER }} group={{ ansible_env.USER }} recurse=yes
+

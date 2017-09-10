@@ -1,0 +1,22 @@
+---
+# tasks file for tilix
+
+- name: Add Tilix repository
+  become: true
+  apt_repository:
+    repo: 'ppa:webupd8team/terminix'
+
+- name: Install the package "Tilix"
+  become: true
+  apt:
+    name: tilix
+    state: present
+
+- name: Install the package "dconf-cli" for importing Tilix settings
+  become: true
+  apt:
+    name: dconf-cli
+    state: present
+
+- name: Restore tilix configuration
+  shell: dconf load /com/gexperts/Tilix/ < /tmp/dev-machine-bootstrapper/apps-conf-files/tilix/tilix.conf

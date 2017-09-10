@@ -1,0 +1,24 @@
+---
+# tasks file for cairodock
+
+ - name: Install cairo-dock
+   become: true
+   apt:
+     name: cairo-dock
+     state: latest
+
+ - name: Apply cairo-dock configuration
+   copy:
+     src: /tmp/dev-machine-bootstrapper/apps-conf-files/cairo/
+     dest: /home/{{ ansible_env.USER }}/.config/cairo-dock
+
+ - name: Add Cairo to startup
+   become: true
+   copy:
+     src: /tmp/dev-machine-bootstrapper/apps-conf-files/cairo/CairoDock.desktop
+     dest: /home/{{ ansible_env.USER }}/.config/autostart/CairoDock.desktop
+
+
+
+
+

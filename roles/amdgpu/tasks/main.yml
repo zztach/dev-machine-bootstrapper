@@ -1,0 +1,32 @@
+---
+# tasks file for amdgpu
+ - name: Check for amdgpu folder
+   find:
+     paths: "{{ apps_dir }}/amdgpu-pro-17.30-465504"
+   register: amdgpu_folders
+
+ - name: Check if amdgpu driver already installed
+   shell: dpkg --get-selections | grep amdgpu-pro
+   ignore_errors: True
+   register: is_amdgpu_installed
+
+ - name: Download amdgpu pro driver
+   command: "wget https://www2.ati.com/drivers/linux/ubuntu/amdgpu-pro-17.30-465504.tar.xz -O /home/{{ ansible_env.USER }}/Downloads/amdgpu-pro-17.30-465504.tar.xz --referer=http://www2.ati.com"
+   when: amdgpu_folders.matched == 0
+
+ - name: Extract amdgpu pro driver
+   become: true
+   unarchive:
+     src: /home/{{ ansible_env.USER }}/Downloads/amdgpu-pro-17.30-465504.tar.xz
+     dest: "{{ apps_dir }}"
+     remote_src: True
+   when: amdgpu_folders.matched == 0
+
+ - name: Install amd-gpu driver
+   become: true
+   command: "{{ apps_dir }}/amdgpu-pro-17.30-465504/amdgpu-pro-install -y"
+   when: is_amdgpu_installed.stdout | length == 0
+
+ - name: Fix ownership
+   become: true
+   file: state=directory path={{ apps_dir }}/amdgpu-pro-17.30-465504 owner={{ ansible_env.USER }} group={{ ansible_env.USER }} recurse=yes

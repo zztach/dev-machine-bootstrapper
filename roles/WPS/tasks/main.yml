@@ -1,0 +1,18 @@
+---
+# tasks file for WPS
+
+ - name: Check if WPS already installed
+   shell: dpkg --get-selections | grep wps-office
+   ignore_errors: True
+   register: is_wps_installed
+
+ - name: Install WPS
+   become: true
+   apt:
+     deb: http://kdl1.cache.wps.com/ksodl/download/linux/a21//wps-office_10.1.0.5707~a21_amd64.deb
+     state: present
+   when: is_wps_installed.stdout | length == 0
+
+ - name: Fix ownership
+   become: true
+   file: state=directory path={{ apps_dir }}/kingsoft owner={{ ansible_env.USER }} group={{ ansible_env.USER }} recurse=yes

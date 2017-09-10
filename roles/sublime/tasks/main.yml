@@ -1,0 +1,24 @@
+---
+# tasks file for sublime
+
+ - name: Check for Sublime folder
+   find:
+     paths: "{{ apps_dir }}/sublime_text_3"
+   register: sublime_folders
+
+ - name: testsub
+   debug:
+     var: sublime_folders
+
+ - name: Download SublimeText and extract under /opt
+   become: true
+   unarchive:
+     src: https://download.sublimetext.com/sublime_text_3_build_3126_x64.tar.bz2
+     dest: "{{ apps_dir }}"
+     remote_src: True
+   when: sublime_folders.matched == 0
+
+ - name: Fix ownership
+   become: true
+   file: state=directory path={{ apps_dir }}/sublime_text_3 owner={{ ansible_env.USER }} group={{ ansible_env.USER }} recurse=yes
+

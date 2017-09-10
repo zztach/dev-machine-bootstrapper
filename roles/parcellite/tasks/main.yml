@@ -1,0 +1,8 @@
+---
+# tasks file for parcellite
+
+ - name: Install Parcellite
+   become: true
+   apt:
+     name: parcellite
+     state: latest

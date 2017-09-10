@@ -1,0 +1,13 @@
+---
+# tasks file for steam
+ - name: Check if Steam already installed
+   shell: apt list --installed | grep steam
+   ignore_errors: True
+   register: is_steam_installed
+
+ - name: Install Steam
+   become: true
+   apt:
+     deb: https://steamcdn-a.akamaihd.net/client/installer/steam.deb
+     state: present
+   when: is_steam_installed.stdout | length == 0

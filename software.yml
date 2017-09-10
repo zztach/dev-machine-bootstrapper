@@ -1,0 +1,12 @@
+---
+
+- hosts: localhost
+  roles:
+    - WPS
+    - amdgpu
+    - vlc
+    - steam
+    - conky
+    - cairodock
+    - indicator_multiload
+    - parcellite

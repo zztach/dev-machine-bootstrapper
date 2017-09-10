@@ -1,0 +1,10 @@
+---
+# tasks file for indicator_multiload
+
+ - name: Install indicator-multiload
+   become: true
+   apt:
+     name: indicator-multiload
+     state: latest
+
+

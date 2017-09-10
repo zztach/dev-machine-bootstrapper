@@ -1,0 +1,8 @@
+apps_dir: "/opt"
+jdk_folder_name: jdk1.8.0_144
+java_version: 8u144
+download_url: "http://download.oracle.com/otn-pub/java/jdk/8u144-b01/090f390dda5b47b9b721c7dfaa008135/jdk-{{ java_version }}-linux-x64.tar.gz"
+jdk_folder: "{{ apps_dir }}/{{ jdk_folder_name }}"
+java_archive: "jdk-{{ java_version }}-linux-x64.tar.gz"
+idea_version: 2017.2.3
+clion_version: 2017.2.2

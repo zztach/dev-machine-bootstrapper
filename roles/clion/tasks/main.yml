@@ -1,0 +1,18 @@
+---
+# tasks file for clion
+ - name: Check for CLion folder
+   find:
+     paths: "/{{ apps_dir }}/clion-2017.2.2/"
+   register: clion_folders
+
+ - name: Download CLion and extract under /opt
+   become: true
+   unarchive:
+     src: "https://download.jetbrains.com/cpp/CLion-{{ clion_version }}.tar.gz"
+     dest: "{{ apps_dir }}"
+     remote_src: True
+   when: clion_folders.matched == 0
+
+ - name: Fix ownership
+   become: true
+   file: state=directory path={{ apps_dir }}/clion-{{ clion_version }} owner={{ ansible_env.USER }} group={{ ansible_env.USER }} recurse=yes

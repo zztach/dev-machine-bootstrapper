@@ -1,0 +1,12 @@
+---
+
+- hosts: localhost
+  roles:
+    - tilix
+    - virtualGL
+    - glew
+    - glm
+    - idea
+    - clion
+    - sublime
+    - java

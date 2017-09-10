@@ -1,0 +1,29 @@
+---
+
+- hosts: localhost
+
+  tasks:
+    - name: Pull ansible script and resources from git
+      git:
+        repo: https://github.com/zztach/dev-machine-bootstrapper.git
+        dest: "/tmp/dev-machine-bootstrapper"
+        update: yes
+        force: yes
+
+    - name: Alias of vi to vim.tiny
+      lineinfile:
+        state: present
+        destfile: "/home/{{ ansible_env.USER }}/.bashrc"
+        line: 'alias vi=vim.tiny'
+
+    - name: Create autostart folder
+      file:
+        path: /home/{{ ansible_env.USER }}/.config/autostart
+        state: directory
+        mode: 0755
+
+    - name: Copy all desktop entries to the appropriate directory
+      become: true
+      copy:
+        src: /tmp/dev-machine-bootstrapper/desktop-entries
+        dest: /usr/share/applications

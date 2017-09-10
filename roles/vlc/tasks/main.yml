@@ -1,0 +1,8 @@
+---
+# tasks file for vlc
+
+ - name: Install VLC
+   become: true
+   apt:
+     name: vlc
+     state: latest
