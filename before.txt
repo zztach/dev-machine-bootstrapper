@@ -7,7 +7,7 @@ cd dev-machine-bootstrapper;
 ansible-playbook dev-machine.yml --ask-sudo-pass
 
 
-ssh-keygen -t rsa -b 4096 -C "zistach@runbox.com"
+ssh-keygen -t rsa -b 4096 -C "myemail@email.com"
 eval "$(ssh-agent -s)"
 ssh-add ~/.ssh/id_rsa
 cat ~/.ssh/id_rsa.pub (and upload it into github SSH keys)
