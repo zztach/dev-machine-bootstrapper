@@ -19,7 +19,7 @@
   become: true
   file: state=directory path={{ apps_dir }}/idea-IU-172.3968.16 owner={{ ansible_env.USER }} group={{ ansible_env.USER }} recurse=yes
 
-- name: Copy all desktop entries to the appropriate directory
+- name: Copy desktop entry
   become: true
   copy:
     src: /tmp/dev-machine-bootstrapper/desktop-entries/jetbrains-idea.desktop
