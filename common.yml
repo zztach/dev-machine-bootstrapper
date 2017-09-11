@@ -10,6 +10,69 @@
         update: yes
         force: yes
 
+    - name: git checkout PlayGround
+      git:
+        repo: git@bitbucket.org:zztach/playground.git
+        dest: "/home/{{ ansible_env.USER }}/sources/Playground"
+        accept_hostkey: yes
+        update: yes
+        force: yes
+
+    - name: git checkout PythiaGP
+      git:
+        repo: git@bitbucket.org:zztach/pythiagp.git
+        dest: "/home/{{ ansible_env.USER }}/sources/pythiagp"
+        accept_hostkey: yes
+        update: yes
+        force: yes
+
+    - name: git checkout clojure-webapp
+      git:
+        repo: git@bitbucket.org:zztach/clojure-webapp.git
+        dest: "/home/{{ ansible_env.USER }}/sources/clojure-webapp"
+        accept_hostkey: yes
+        update: yes
+        force: yes
+
+    - name: git checkout cyclades-companion
+      git:
+        repo: git@bitbucket.org:zztach/cyclades-companion.git
+        dest: "/home/{{ ansible_env.USER }}/sources/cyclades-companion"
+        accept_hostkey: yes
+        update: yes
+        force: yes
+
+    - name: git checkout OpenGL
+      git:
+        repo: git@bitbucket.org:zztach/opengl.git
+        dest: "/home/{{ ansible_env.USER }}/sources/OpenGL"
+        accept_hostkey: yes
+        update: yes
+        force: yes
+
+    - name: git checkout Leaderboard
+      git:
+        repo: git@github.com:zztach/Leaderboard.git
+        dest: "/home/{{ ansible_env.USER }}/sources/Leaderboard"
+        accept_hostkey: yes
+        update: yes
+        force: yes
+
+    - name: git checkout Dungeon
+      git:
+        repo: git@github.com:zztach/Dungeon.git
+        dest: "/home/{{ ansible_env.USER }}/sources/Dungeon"
+        accept_hostkey: yes
+        update: yes
+        force: yes
+
+    - name: Pull ansible script and resources from git
+      git:
+        repo: https://github.com/zztach/dev-machine-bootstrapper.git
+        dest: "/home/{{ ansible_env.USER }}/sources/dev-machine-bootstrapper"
+        update: yes
+        force: yes
+
     - name: Alias of vi to vim.tiny
       lineinfile:
         state: present
