@@ -87,7 +87,7 @@
         state: directory
         mode: 0755
 
-    - name: Apply cairo-dock configuration
+    - name: Deploy default .gitconfig
       copy:
        src: /tmp/dev-machine-bootstrapper/apps-conf-files/.gitconfig
        dest: /home/{{ ansible_env.USER }}/.gitconfig
