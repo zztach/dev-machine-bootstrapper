@@ -24,3 +24,15 @@
   copy:
     src: /tmp/dev-machine-bootstrapper/desktop-entries/jetbrains-idea.desktop
     dest: /usr/share/applications/jetbrains-idea.desktop
+
+- name: Change IntelliJ config folder to SSD
+  lineinfile:
+    path: "{{ apps_dir }}/idea-IU-172.3968.16/bin/idea.properties"
+    regexp: 'idea\.config\.path'
+    line: 'idea.config.path=/opt/.IntelliJIdea/config'
+
+- name: Change IntelliJ system folder to SSD
+  lineinfile:
+    path: "{{ apps_dir }}/idea-IU-172.3968.16/bin/idea.properties"
+    regexp: 'idea\.system\.path'
+    line: 'idea.system.path=/opt/.IntelliJIdea/system'
