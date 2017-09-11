@@ -6,9 +6,9 @@ git clone https://github.com/zztach/dev-machine-bootstrapper;
 cd dev-machine-bootstrapper;
 ansible-playbook dev-machine.yml --ask-sudo-pass
 
+ssh-keygen -t rsa -b 4096 -C "myemail@email.com";
+eval "$(ssh-agent -s)";
+ssh-add ~/.ssh/id_rsa;
 
-ssh-keygen -t rsa -b 4096 -C "myemail@email.com"
-eval "$(ssh-agent -s)"
-ssh-add ~/.ssh/id_rsa
 cat ~/.ssh/id_rsa.pub (and upload it into github SSH keys)
 change url under .git/config to git@github.com:zztach/dev-machine-bootstrapper.git
