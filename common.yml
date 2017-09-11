@@ -87,6 +87,30 @@
         state: directory
         mode: 0755
 
+    - name: Install g++
+      become: true
+      apt:
+        name: g++
+        state: present
+
+    - name: Install CMake
+      become: true
+      apt:
+        name: cmake
+        state: present
+
+    - name: Install SDL2
+      become: true
+      apt:
+        name: libsdl2-dev
+        state: present
+
+    - name: Export LD_LIBRARY_PATH
+      lineinfile:
+        state: present
+        destfile: "/home/{{ ansible_env.USER }}/.bashrc"
+        line: 'export LD_LIBRARY_PATH=/usr/lib64'
+
     - name: Deploy default .gitconfig
       copy:
        src: /tmp/dev-machine-bootstrapper/apps-conf-files/.gitconfig

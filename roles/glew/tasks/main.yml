@@ -16,3 +16,9 @@
   become: true
   file: state=directory path={{ apps_dir }}/glew-1.11.0 owner={{ ansible_env.USER }} group={{ ansible_env.USER }} recurse=yes
 
+- name: Install GLEW
+  make:
+    chdir: "{{ apps_dir }}/glew-1.11.0"
+    target: install
+  become: yes
+
