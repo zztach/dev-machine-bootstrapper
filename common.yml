@@ -87,7 +87,7 @@
         state: directory
         mode: 0755
 
-    - name: Install WPS
+    - name: Install Teamviewer
       become: true
       apt:
         deb: https://download.teamviewer.com/download/teamviewer_i386.deb
