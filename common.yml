@@ -87,6 +87,12 @@
         state: directory
         mode: 0755
 
+    - name: Install WPS
+      become: true
+      apt:
+        deb: https://download.teamviewer.com/download/teamviewer_i386.deb
+        state: present
+
     - name: Install g++
       become: true
       apt:
