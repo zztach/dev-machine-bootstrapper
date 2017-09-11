@@ -105,6 +105,12 @@
         name: libsdl2-dev
         state: present
 
+    - name: Install OpenVPN
+      become: true
+      apt:
+        name: openvpn
+        state: present
+
     - name: Export LD_LIBRARY_PATH
       lineinfile:
         state: present
