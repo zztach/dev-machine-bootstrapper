@@ -75,11 +75,17 @@
         update: yes
         force: yes
 
+    - name: Install vim
+      become: true
+      apt:
+        name: vim
+        state: present
+
     - name: Alias of vi to vim.tiny
       lineinfile:
         state: present
         destfile: "/home/{{ ansible_env.USER }}/.bashrc"
-        line: 'alias vi=vim.tiny'
+        line: 'alias vi=vim'
 
     - name: Create autostart folder
       file:
