@@ -14,7 +14,7 @@
 
  - name: Apply +x permissions to conky startup script
    file:
-     path: /home/{{ ansible_env.USER }}/.conky/conky-startup.sh
+     path: "/home/{{ ansible_env.USER }}/.conky/conky-startup.sh"
      owner: "{{ ansible_env.USER }}"
      group: "{{ ansible_env.USER }}"
      mode: "u=rwx,g=r,o=r"
@@ -24,3 +24,9 @@
    copy:
      src: /tmp/dev-machine-bootstrapper/apps-conf-files/conky/Conky.desktop
      dest: /home/{{ ansible_env.USER }}/.config/autostart/Conky.desktop
+
+ - name: Update network interface
+   replace:
+     path: "/home/{{ ansible_env.USER }}/.conky/conkyrc_sample"
+     regexp: '$NETWORK_INTERFACE'
+     replace: "ifconfig | grep -B1 192 | awk {'print $1'} | head -n 1}"
