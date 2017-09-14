@@ -7,6 +7,21 @@
      name: conky-all
      state: latest
 
+ - name :  Test bash
+   shell: ifconfig | grep -B1 192 | awk {'print $1'} | head -n 1
+   ignore_errors: True
+   register: network_interface
+
+ - name :  Test bash #1
+   debug:
+     var: network_interface.stdout
+
+ - name: Update network interface
+   replace:
+     path: "/tmp/dev-machine-bootstrapper/apps-conf-files/conky/conkyrc_sample"
+     regexp: 'Z_NETWORK_INTERFACE'
+     replace: "{{ network_interface.stdout }}"
+
  - name: Apply conky configuration
    copy:
      src: /tmp/dev-machine-bootstrapper/apps-conf-files/conky/
@@ -24,9 +39,3 @@
    copy:
      src: /tmp/dev-machine-bootstrapper/apps-conf-files/conky/Conky.desktop
      dest: /home/{{ ansible_env.USER }}/.config/autostart/Conky.desktop
-
- - name: Update network interface
-   replace:
-     path: "/home/{{ ansible_env.USER }}/.conky/conkyrc_sample"
-     regexp: '$NETWORK_INTERFACE'
-     replace: "ifconfig | grep -B1 192 | awk {'print $1'} | head -n 1}"
