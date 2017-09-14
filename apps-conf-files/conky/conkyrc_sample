@@ -74,6 +74,9 @@ ${goto 30}CPU 0${goto 90}${color}${cpu cpu0}%${goto 160}${execi 30 sensors|grep 
 ${goto 30}${color1}CPU 1${goto 90}${color}${cpu cpu1}%${goto 160}${execi 30 sensors|grep 'Core 1'| awk -F'+' '{print $2}' | awk -F'.' '{print $1}'} °C 
 ${goto 30}${color1}CPU 2${goto 90}${color}${cpu cpu2}%${goto 160}${execi 30 sensors|grep 'Core 2'| awk -F'+' '{print $2}' | awk -F'.' '{print $1}'} °C 
 ${goto 30}${color1}CPU 3${goto 90}${color}${cpu cpu3}%${goto 160}${execi 30 sensors|grep 'Core 3'| awk -F'+' '{print $2}' | awk -F'.' '{print $1}'} °C 
+${goto 30}${color1}CPU 4${goto 90}${color}${cpu cpu4}%${goto 160}${execi 30 sensors|grep 'Core 4'| awk -F'+' '{print $2}' | awk -F'.' '{print $1}'} °C
+${goto 30}${color1}CPU 5${goto 90}${color}${cpu cpu5}%${goto 160}${execi 30 sensors|grep 'Core 5'| awk -F'+' '{print $2}' | awk -F'.' '{print $1}'} °C
+
 ${goto 20}${color2}${font pftempestafivecondensed:size=11}${voffset 20}CPU PROCESSES:${font}${color1}
 ${goto 30}${voffset 10}${color1}${top name 1}${goto 130}${color}${top cpu 1}%
 ${goto 30}${color1}${top name 2}${goto 130}${color}${top cpu 2}%
@@ -92,6 +95,10 @@ ${goto 20}${color2}${font pftempestafivecondensed:size=11}DISCS:${font}
 ${goto 90}FREE:${goto 160}TOTAL:${color}${font}
 ${goto 30}${color1}Home${color}${goto 90}${fs_free /home}${goto 160}${fs_size /home}
 ${goto 30}${color1}Root${color}${goto 90}${fs_free /}${goto 160}${fs_size /}
+
+${goto 20}${color2}${font pftempestafivecondensed:size=11}GRAPHICS CARD: ${font}${color1}
+${goto 30}${voffset 10}Model:${color}${execi 5 glxinfo | grep "OpenGL renderer string" | awk {'print $5 " " $7 $8'}}
+${goto 30}${color1}Temp:${color}${execi 5 sensors | grep -A 3 amdgpu | tail -n 1 | awk {'print $2'}}
 
 ${goto 20}${color2}${font pftempestafivecondensed:size=11}NETWORK:${font}${color}
 ${goto 30}${color1}Down${color}${goto 60} ${downspeed Z_NETWORK_INTERFACE} ${goto 120}/${totaldown Z_NETWORK_INTERFACE}
