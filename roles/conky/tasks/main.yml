@@ -34,6 +34,12 @@
      group: "{{ ansible_env.USER }}"
      mode: "u=rwx,g=r,o=r"
 
+ - name: Update username
+   replace:
+     path: /tmp/dev-machine-bootstrapper/apps-conf-files/conky/Conky.desktop
+     regexp: 'Z_USER'
+     replace: "{{ ansible_env.USER }}"
+
  - name: Add Conky to startup
    become: true
    copy:
