@@ -1,11 +1,11 @@
 ---
 # tasks file for clion
- - name: Check for CLion folder
-   find:
-     paths: "/{{ apps_dir }}/clion-{{ clion_version }}"
-   register: clion_folders
+- name: Check for CLion folder
+  find:
+    paths: "/{{ apps_dir }}/clion-{{ clion_version }}"
+  register: clion_folders
 
-- name: Create IDEA folder if not exists
+- name: Create CLion folder if not exists
   become: true
   file:
     path: "{{ apps_dir }}/clion-{{ clion_version }}"
