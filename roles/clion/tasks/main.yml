@@ -2,14 +2,25 @@
 # tasks file for clion
  - name: Check for CLion folder
    find:
-     paths: "/{{ apps_dir }}/clion-2017.2.2/"
+     paths: "/{{ apps_dir }}/clion-{{ clion_version }}"
    register: clion_folders
+
+- name: Create IDEA folder if not exists
+  become: true
+  file:
+    path: "{{ apps_dir }}/clion-{{ clion_version }}"
+    state: directory
+    owner: root
+    group: root
+    mode: 0775
+  when: clion_folders.matched == 0
 
  - name: Download CLion and extract under /opt
    become: true
    unarchive:
      src: "https://download.jetbrains.com/cpp/CLion-{{ clion_version }}.tar.gz"
      dest: "{{ apps_dir }}"
+     extra_opts: [--strip-components=1]
      remote_src: True
    when: clion_folders.matched == 0
 
@@ -25,12 +36,12 @@
 
  - name: Change IntelliJ config folder to SSD
    lineinfile:
-     path: "{{ apps_dir }}/clion-2017.2.2/bin/idea.properties"
+     path: "{{ apps_dir }}/clion-{{ clion_version }}/bin/idea.properties"
      regexp: 'idea\.config\.path'
      line: 'idea.config.path=/opt/.CLion/config'
 
  - name: Change IntelliJ system folder to SSD
    lineinfile:
-     path: "{{ apps_dir }}/clion-2017.2.2/bin/idea.properties"
+     path: "{{ apps_dir }}/clion-{{ clion_version }}/bin/idea.properties"
      regexp: 'idea\.system\.path'
      line: 'idea.system.path=/opt/.CLion/system'
