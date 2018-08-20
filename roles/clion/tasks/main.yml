@@ -19,7 +19,7 @@
    become: true
    unarchive:
      src: "https://download.jetbrains.com/cpp/CLion-{{ clion_version }}.tar.gz"
-     dest: "{{ apps_dir }}"
+     dest: "{{ apps_dir }}/clion-{{ clion_version }}"
      extra_opts: [--strip-components=1]
      remote_src: True
    when: clion_folders.matched == 0
