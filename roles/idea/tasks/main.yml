@@ -7,6 +7,16 @@
     paths: "/{{ apps_dir }}/idea-IU-{{ idea_version }}"
   register: idea_folders
 
+- name: Create IDEA folder if not exists
+  become: true
+  file:
+    path: "{{ apps_dir }}/idea-IU-{{ idea_version }}"
+    state: directory
+    owner: root
+    group: root
+    mode: 0775
+  when: idea_folders.matched == 0
+
 - name: Download IntelliJ Idea and extract under /opt
   become: true
   unarchive:
