@@ -4,20 +4,20 @@
 - name: Check for IDEA folder
   become: true
   find:
-    paths: "/{{ apps_dir }}/idea-IU-172.3968.16"
+    paths: "/{{ apps_dir }}/idea-IU-{{ idea_version }}"
   register: idea_folders
 
 - name: Download IntelliJ Idea and extract under /opt
   become: true
   unarchive:
     src: "https://download.jetbrains.com/idea/ideaIU-{{ idea_version }}.tar.gz"
-    dest: "{{ apps_dir }}"
+    dest: "/{{ apps_dir }}/idea-IU-{{ idea_version }}"
     remote_src: True
   when: idea_folders.matched == 0
 
 - name: Fix ownership
   become: true
-  file: state=directory path={{ apps_dir }}/idea-IU-172.3968.16 owner={{ ansible_env.USER }} group={{ ansible_env.USER }} recurse=yes
+  file: state=directory path={{ apps_dir }}/idea-IU-{{ idea_version }} owner={{ ansible_env.USER }} group={{ ansible_env.USER }} recurse=yes
 
 - name: Copy desktop entry
   become: true
@@ -27,12 +27,12 @@
 
 - name: Change IntelliJ config folder to SSD
   lineinfile:
-    path: "{{ apps_dir }}/idea-IU-172.3968.16/bin/idea.properties"
+    path: "{{ apps_dir }}/idea-IU-{{ idea_version }}/bin/idea.properties"
     regexp: 'idea\.config\.path'
     line: 'idea.config.path=/opt/.IntelliJIdea/config'
 
 - name: Change IntelliJ system folder to SSD
   lineinfile:
-    path: "{{ apps_dir }}/idea-IU-172.3968.16/bin/idea.properties"
+    path: "{{ apps_dir }}/idea-IU-{{ idea_version }}/bin/idea.properties"
     regexp: 'idea\.system\.path'
     line: 'idea.system.path=/opt/.IntelliJIdea/system'
