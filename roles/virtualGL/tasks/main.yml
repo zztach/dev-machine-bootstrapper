@@ -7,7 +7,7 @@
 - name: Download VirtualGL and extract under /opt
   become: true
   unarchive:
-    src: https://github.com/VirtualGL/virtualgl/releases/download/2.5.2test/VirtualGL-2.5.2.tar.gz
+    src: https://github.com/VirtualGL/virtualgl/archive/2.5.1.tar.gz
     dest: "{{ apps_dir }}"
     remote_src: True
   when: not virtualgl_path.stat.exists
