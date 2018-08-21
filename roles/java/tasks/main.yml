@@ -3,7 +3,7 @@
 
  - name: Check for Java folder
    find:
-     paths: "{{ apps_dir }}/jdk1.8.0_144"
+     paths: "{{ apps_dir }}/{{ jdk_folder }}"
    register: jdk_folders
 
  - name: Download Java
